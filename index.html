@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decide Tu Destino</title>
+    <style>
+        body {
+            background-color: white;
+            color: black;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+        .option {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .option-blue {
+            background-color: lightblue;
+        }
+        .option-blue:hover {
+            background-color: deepskyblue;
+        }
+        .option-yellow {
+            background-color: lightyellow;
+        }
+        .option-yellow:hover {
+            background-color: gold;
+        }
+        .option-green {
+            background-color: lightgreen;
+            display: none;
+        }
+        .option-green:hover {
+            background-color: limegreen;
+        }
+        #story {
+            font-size: 1.5em;
+            margin: 20px;
+            text-align: center;
+        }
+        #fin {
+            font-size: 0;
+            transition: font-size 2s;
+        }
+        #storyImage {
+            width: 80%;
+            max-width: 400px;
+            margin: 20px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Decide Tu Destino</h1>
+    <div id="story"></div>
+    <div id="options">
+        <div id="option1" class="option option-blue"></div>
+        <div id="option2" class="option option-yellow"></div>
+        <div id="reiniciar" class="option option-green">Reiniciar</div>
+    </div>
+    <img id="storyImage" src="" alt="Story Image">
+    <div id="fin">Fin</div>
+    <script>
+        const storyElement = document.getElementById('story');
+        const storyImageElement = document.getElementById('storyImage');
+        const option1Element = document.getElementById('option1');
+        const option2Element = document.getElementById('option2');
+        const reiniciarElement = document.getElementById('reiniciar');
+        const finElement = document.getElementById('fin');
+
+        let currentStep = 0;
+
+        const story = [
+            {
+                text: "Te despiertas en una isla misteriosa. A lo lejos ves una cueva y una montaña. ¿Qué haces?",
+                options: ["Exploras la cueva", "Subes la montaña"],
+                image: "isla.png"
+            },
+            {
+                text: "Entras en la cueva y encuentras un mapa antiguo. ¿Lo sigues o sales de la cueva?",
+                options: ["Sigues el mapa", "Sales de la cueva"],
+                image: "cueva.png"
+            },
+            {
+                text: "Sigues el mapa y descubres un portal del tiempo. ¿Entras en el portal o buscas más en la cueva?",
+                options: ["Entras en el portal", "Buscas más en la cueva"],
+                image: "portal.png"
+            },
+            {
+                text: "Viajas en el tiempo y llegas a una civilización antigua. Te reciben como un invitado. ¿Qué haces?",
+                options: ["Exploras la ciudad", "Buscas el tesoro"],
+                image: "civilizacion.png"
+            },
+            {
+                text: "Encuentras un guía que te habla de un tesoro escondido. ¿Lo sigues o te quedas en la ciudad?",
+                options: ["Lo sigues", "Te quedas en la ciudad"],
+                image: "guia.png"
+            },
+            {
+                text: "El guía te lleva a una jungla espesa. ¿Sigues adelante o regresas?",
+                options: ["Sigues adelante", "Regresas"],
+                image: "jungla.png"
+            },
+            {
+                text: "Descubres una entrada secreta al templo del tesoro. ¿Entras o buscas otra entrada?",
+                options: ["Entras", "Buscas otra entrada"],
+                image: "templo.png"
+            },
+            {
+                text: "Encuentras el tesoro pero el templo empieza a derrumbarse. ¿Intentas escapar con el tesoro o lo dejas?",
+                options: ["Escapas con el tesoro", "Lo dejas"],
+                image: "tesoro.png"
+            },
+            {
+                text: "Logras salir del templo con el tesoro. ¿Qué haces ahora?",
+                options: ["Regresas a la isla", "Sigues explorando"],
+                image: "escape.png"
+            },
+            {
+                text: "Regresas a la isla y usas el portal para volver a casa con el tesoro. ¡Felicidades, has completado tu aventura!",
+                options: ["Fin", "Fin"],
+                image: "regreso.png"
+            }
+        ];
+
+        function updateStory() {
+            if (currentStep >= story.length) {
+                showFin();
+                return;
+            }
+            
+            const currentStory = story[currentStep];
+            storyElement.textContent = currentStory.text;
+            storyImageElement.src = currentStory.image;
+            storyImageElement.style.display = 'block';
+            option1Element.textContent = currentStory.options[0];
+            option2Element.textContent = currentStory.options[1];
+            option1Element.style.display = 'block';
+            option2Element.style.display = 'block';
+            reiniciarElement.style.display = 'none';
+        }
+
+        function selectOption(option) {
+            if (currentStep >= story.length - 1) {
+                showFin();
+            } else {
+                currentStep++;
+                updateStory();
+            }
+        }
+
+        function showFin() {
+            storyElement.style.display = 'none';
+            storyImageElement.style.display = 'none';
+            option1Element.style.display = 'none';
+            option2Element.style.display = 'none';
+            finElement.style.fontSize = '2em';
+            reiniciarElement.style.display = 'block';
+        }
+
+        function restartGame() {
+            currentStep = 0;
+            storyElement.style.display = 'block';
+            storyImageElement.style.display = 'block';
+            option1Element.style.display = 'block';
+            option2Element.style.display = 'block';
+            finElement.style.fontSize = '0';
+            updateStory();
+        }
+
+        option1Element.addEventListener('click', () => selectOption(1));
+        option2Element.addEventListener('click', () => selectOption(2));
+        reiniciarElement.addEventListener('click', restartGame);
+
+        updateStory();
+    </script>
+</body>
+</html>
